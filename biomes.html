@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PokéRogue Biomes</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 25px;
+  background: #0b1020; color: white;
+  font-family: Arial, sans-serif;
+}
+nav { margin-bottom: 25px; }
+a { color: #c4b5fd; text-decoration: none; }
+a:hover { color: white; }
+h1 { color: #c4b5fd; text-align: center; }
+.subtitle { text-align: center; color: #9ca3af; }
+input, select {
+  width: 100%; padding: 12px; margin: 7px 0;
+  background: #151c30; color: white;
+  border: 1px solid #514078; border-radius: 9px;
+}
+#biomes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px; max-width: 1100px; margin: 25px auto;
+}
+.card {
+  background: #151c30; border: 1px solid #303b56;
+  border-radius: 14px; padding: 20px;
+  transition: .2s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #a78bfa;
+  box-shadow: 0 0 18px #7c3aed66;
+}
+.card h2 { color: #c4b5fd; }
+.card p { color: #d1d5db; line-height: 1.5; }
+.tag {
+  display: inline-block; background: #312e81;
+  padding: 5px 9px; border-radius: 20px; font-size: 12px;
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">Home</a> |
+  <a href="pokedex.html">Pokédex</a> |
+  <a href="biomes.html">Biomes</a> |
+  <a href="guides.html">Guides</a>
+  <a href="incineroar-family.html">🔥 Litten Family</a>
+</nav>
+
+<h1>🌍 PokéRogue Biomes</h1>
+<p class="subtitle">Explore the world, one biome at a time!</p>
+
+<input id="search" placeholder="🔎 Search biomes...">
+<select id="region">
+  <option value="all">All biome categories</option>
+  <option value="land">Land</option>
+  <option value="water">Water</option>
+  <option value="special">Special</option>
+</select>
+
+<main id="biomes"></main>
+
+<script>
+const data = [
+  ["Town","land","A starting-area biome with familiar Pokémon."],
+  ["Plains","land","Open grassland with a variety of wild Pokémon."],
+  ["Tall Grass","land","Dense grass where wild Pokémon can appear."],
+  ["Forest","land","Woodland habitat for many Bug and Grass Pokémon."],
+  ["Meadow","land","A grassy habitat associated with flowers and nature."],
+  ["Mountain","land","Rocky terrain with Pokémon adapted to high places."],
+  ["Cave","land","Underground habitat with Rock and Ground Pokémon."],
+  ["Desert","land","A hot, sandy environment with adapted species."],
+  ["Volcano","land","A fiery habitat for Fire-type Pokémon."],
+  ["Beach","water","A coastal area with land and water encounters."],
+  ["Sea","water","An aquatic biome with many Water Pokémon."],
+  ["Swamp","water","Wetlands with unusual and Poison-type Pokémon."],
+  ["Lake","water","Freshwater habitat for aquatic Pokémon."],
+  ["Ice Cave","land","A cold habitat for Ice-type Pokémon."],
+  ["Snowy Forest","land","Snow-covered woodland."],
+  ["Graveyard","special","A spooky place associated with Ghost Pokémon."],
+  ["Dojo","special","A location suited to fighting-focused encounters."],
+  ["Factory","special","An industrial area associated with Steel Pokémon."],
+  ["Laboratory","special","A scientific location with unusual encounters."],
+  ["Space","special","An unusual biome featuring cosmic encounters."]
+];
+
+const container = document.getElementById("biomes");
+
+function render() {
+  const q = document.getElementById("search").value.toLowerCase();
+  const category = document.getElementById("region").value;
+  const results = data.filter(([name, type, description]) =>
+    (name.toLowerCase().includes(q) ||
+     description.toLowerCase().includes(q)) &&
+    (category === "all" || type === category)
+  );
+
+  container.innerHTML = results.map(([name, type, description]) => `
+    <article class="card">
+      <span class="tag">${type.toUpperCase()}</span>
+      <h2>${name}</h2>
+      <p>${description}</p>
+    </article>
+  `).join("") || "<p>No matching biomes found.</p>";
+}
+
+document.getElementById("search").addEventListener("input", render);
+document.getElementById("region").addEventListener("change", render);
+render();
+</script>
+</body>
+</html>

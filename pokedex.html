@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokédex | PokéRogue Central</title>
+<style>
+:root {
+  --bg: #090b18;
+  --panel: #14172b;
+  --purple: #a855f7;
+  --pink: #f472b6;
+  --text: #f5f3ff;
+  --muted: #aaa8c4;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(ellipse at top, #251044, var(--bg) 60%);
+  color: var(--text);
+  min-height: 100vh;
+}
+header {
+  text-align: center;
+  padding: 38px 16px 24px;
+}
+h1 {
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  margin: 10px 0;
+  background: linear-gradient(90deg, #c084fc, #f9a8d4, #93c5fd);
+  color: transparent;
+  background-clip: text;
+}
+header p { color: var(--muted); }
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px;
+  background: #0b0b18ed;
+  border-bottom: 1px solid #a855f755;
+  backdrop-filter: blur(12px);
+}
+nav a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 12px;
+  background: #1a1830;
+}
+nav a:hover, nav a.active {
+  background: var(--purple);
+  transform: translateY(-2px);
+}
+main { max-width: 1250px; margin: auto; padding: 22px; }
+.controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin: 16px 0 24px;
+}
+input, select, button {
+  width: 100%;
+  padding: 13px;
+  border-radius: 12px;
+  border: 1px solid #8b5cf655;
+  background: var(--panel);
+  color: white;
+  font-size: 1rem;
+}
+button { cursor: pointer; font-weight: bold; }
+button:hover { border-color: var(--pink); }
+#status { color: var(--muted); text-align: center; margin: 18px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: 16px;
+}
+.card {
+  position: relative;
+  background: linear-gradient(145deg, #1d1b38, #101322);
+  border: 1px solid #a855f733;
+  border-radius: 18px;
+  padding: 16px 10px;
+  text-align: center;
+  transition: transform .2s, border-color .2s;
+  overflow: hidden;
+}
+.card:hover {
+  transform: translateY(-5px);
+  border-color: var(--pink);
+  box-shadow: 0 8px 28px #a855f722;
+}
+.card img { width: 112px; height: 112px; object-fit: contain; }
+.number { color: #aaa8c4; font-size: .8rem; }
+.name { text-transform: capitalize; font-weight: bold; margin: 8px 0; }
+.types { display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; }
+.type {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  color: #111;
+  font-size: .72rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.grass { background:#86efac; } .fire { background:#fca5a5; }
+.water { background:#93c5fd; } .bug { background:#bef264; }
+.normal { background:#d4d4d8; } .poison { background:#d8b4fe; }
+.electric { background:#fde047; } .ground { background:#d6a77a; }
+.fairy { background:#f9a8d4; } .fighting { background:#fdba74; }
+.psychic { background:#f0abfc; } .rock { background:#c4b5a5; }
+.ghost { background:#a5b4fc; } .ice { background:#a5f3fc; }
+.dragon { background:#c4b5fd; } .dark { background:#a1a1aa; }
+.steel { background:#cbd5e1; } .flying { background:#c7d2fe; }
+#more { display:block; max-width:300px; margin:28px auto; }
+#more:disabled { opacity:.5; cursor:wait; }
+footer { text-align:center; padding:30px; color:var(--muted); }
+.small { color:var(--muted); font-size:.85rem; text-align:center; }
+</style>
+</head>
+<body>
+<header>
+  <div>⚡ 🌟 🟣 🌟 ⚡</div>
+  <h1>POKÉDEX</h1>
+  <p>Your Pokémon discovery database</p>
+</header>
+
+<nav>
+  <a href="index.html">🏠 Home</a>
+  <a href="pokedex.html" class="active">📖 Pokédex</a>
+  <a href="biomes.html">🌍 Biomes</a>
+  <a href="guides.html">⚔️ Guides</a>
+  <a href="special-forms.html">✨ Special Forms</a>
+  <a href="incineroar-family.html">🔥 Litten Family</a>
+</nav>
+
+<main>
+  <h2>🔎 Find your Pokémon</h2>
+  <p class="small">Search by name or Pokédex number. Load more Pokémon as you explore!</p>
+
+  <div class="controls">
+    <input id="search" placeholder="Search Pokémon or # number...">
+    <select id="type">
+      <option value="">All types</option>
+      <option>Normal</option><option>Fire</option><option>Water</option>
+      <option>Electric</option><option>Grass</option><option>Ice</option>
+      <option>Fighting</option><option>Poison</option><option>Ground</option>
+      <option>Flying</option><option>Psychic</option><option>Bug</option>
+      <option>Rock</option><option>Ghost</option><option>Dragon</option>
+      <option>Dark</option><option>Steel</option><option>Fairy</option>
+    </select>
+    <button id="shiny">✨ Shiny sprites: OFF</button>
+  </div>
+
+  <div id="status">Loading Pokémon... 💜</div>
+  <section id="grid" class="grid"></section>
+  <button id="more">⬇️ Load More Pokémon</button>
+  <p class="small">Pokémon data and sprites provided by PokéAPI.</p>
+</main>
+
+<footer>💜 Made for Pokémon fans • PokéRogue Central</footer>
+
+<script>
+const API = "https://pokeapi.co/api/v2";
+const grid = document.getElementById("grid");
+const statusText = document.getElementById("status");
+const moreButton = document.getElementById("more");
+const searchInput = document.getElementById("search");
+const typeSelect = document.getElementById("type");
+const shinyButton = document.getElementById("shiny");
+
+let allPokemon = [];
+let shown = 0;
+let shiny = false;
+let loading = false;
+const BATCH_SIZE = 72;
+
+function spriteUrl(id) {
+  return shiny
+    ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`
+    : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+}
+
+function makeCard(p) {
+  const card = document.createElement("article");
+  card.className = "card";
+
+  const img = document.createElement("img");
+  img.loading = "lazy";
+  img.alt = p.name;
+  img.src = spriteUrl(p.id);
+  img.onerror = () => {
+    img.onerror = null;
+    img.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png";
+  };
+
+  const number = document.createElement("div");
+  number.className = "number";
+  number.textContent = "#" + String(p.id).padStart(4, "0");
+
+  const name = document.createElement("div");
+  name.className = "name";
+  name.textContent = p.name.replaceAll("-", " ");
+
+  const types = document.createElement("div");
+  types.className = "types";
+
+  card.append(img, number, name, types);
+
+  fetch(`${API}/pokemon/${p.name}`)
+    .then(r => {
+      if (!r.ok) throw new Error("Could not load Pokémon details");
+      return r.json();
+    })
+    .then(details => {
+      details.types.forEach(t => {
+        const tag = document.createElement("span");
+        tag.className = "type " + t.type.name;
+        tag.textContent = t.type.name;
+        types.appendChild(tag);
+      });
+      card.dataset.types = details.types.map(t => t.type.name).join(",");
+      applyFilters();
+    })
+    .catch(() => {
+      types.textContent = "Details unavailable";
+    });
+
+  return card;
+}
+
+async function loadNextBatch() {
+  if (loading) return;
+  loading = true;
+  moreButton.disabled = true;
+  statusText.textContent = "Loading Pokémon... 💜";
+
+  try {
+    if (allPokemon.length === 0) {
+      const response = await fetch(`${API}/pokemon?limit=2000&offset=0`);
+      if (!response.ok) throw new Error("PokéAPI is unavailable");
+      const data = await response.json();
+     allPokemon = data.results.map(p => ({
+  name: p.name,
+  id: Number(p.url.split("/").filter(Boolean).pop())
+}));
+    }
+
+    const batch = allPokemon.slice(shown, shown + BATCH_SIZE);
+    batch.forEach(p => grid.appendChild(makeCard(p)));
+    shown += batch.length;
+
+    applyFilters();
+    statusText.textContent = `Showing ${shown} of ${allPokemon.length} Pokémon`;
+    moreButton.style.display = shown >= allPokemon.length ? "none" : "block";
+  } catch (error) {
+    statusText.textContent = "Couldn't load Pokémon. Check your internet and try again!";
+    moreButton.style.display = "block";
+  } finally {
+    loading = false;
+    moreButton.disabled = false;
+  }
+}
+
+function applyFilters() {
+  const query = searchInput.value.toLowerCase().trim().replace(/^#/, "");
+  const selectedType = typeSelect.value.toLowerCase();
+  let visible = 0;
+
+  [...grid.children].forEach(card => {
+    const number = card.querySelector(".number").textContent.replace("#", "");
+    const name = card.querySelector(".name").textContent.toLowerCase();
+    const types = (card.dataset.types || "").split(",");
+    const matchesSearch = !query || name.includes(query) || number.startsWith(query);
+    const matchesType = !selectedType || types.includes(selectedType);
+    const show = matchesSearch && matchesType;
+    card.style.display = show ? "" : "none";
+    if (show) visible++;
+  });
+
+  if (allPokemon.length && !loading) {
+    statusText.textContent = `${visible} Pokémon shown • ${shown} loaded`;
+  }
+}
+
+shinyButton.addEventListener("click", () => {
+  shiny = !shiny;
+  shinyButton.textContent = `✨ Shiny sprites: ${shiny ? "ON" : "OFF"}`;
+  grid.querySelectorAll(".card img").forEach(img => {
+    const card = img.closest(".card");
+    const number = card.querySelector(".number").textContent.replace("#", "");
+    img.src = spriteUrl(Number(number));
+  });
+});
+
+searchInput.addEventListener("input", applyFilters);
+typeSelect.addEventListener("change", applyFilters);
+moreButton.addEventListener("click", loadNextBatch);
+
+loadNextBatch();
+</script>
+</body>
+</html>

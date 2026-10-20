@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PokéRogue Ultimate Wiki</title>
+<style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #090d1b;
+  color: white;
+}
+nav {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; justify-content: center;
+  flex-wrap: wrap; gap: 25px;
+  padding: 18px;
+  background: #10162aee;
+  border-bottom: 1px solid #35265b;
+  backdrop-filter: blur(12px);
+}
+nav a {
+  color: #c4b5fd; text-decoration: none;
+  font-weight: bold; transition: .2s;
+}
+nav a:hover { color: white; text-shadow: 0 0 12px #a78bfa; }
+.hero {
+  min-height: 440px; padding: 90px 20px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 50% 40%, #5125a455, transparent 60%),
+    linear-gradient(135deg, #11182e, #090d1b);
+}
+.hero h1 {
+  font-size: clamp(36px, 7vw, 68px);
+  margin: 0 0 18px;
+  color: #ddd6fe;
+  text-shadow: 0 0 28px #8b5cf6aa;
+  animation: float 3s ease-in-out infinite;
+}
+.hero p {
+  max-width: 620px; line-height: 1.7;
+  color: #cbd5e1; font-size: 18px;
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.buttons {
+  display: flex; flex-wrap: wrap;
+  justify-content: center; gap: 12px; margin-top: 20px;
+}
+.btn {
+  display: inline-block; padding: 14px 22px;
+  background: #6d28d9; color: white;
+  text-decoration: none; font-weight: bold;
+  border: 1px solid #a78bfa; border-radius: 10px;
+  transition: .2s;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  background: #7c3aed;
+  box-shadow: 0 0 22px #8b5cf688;
+}
+main { max-width: 1100px; margin: auto; padding: 35px 20px; }
+h2 { color: #c4b5fd; text-align: center; }
+.intro { text-align: center; color: #9ca3af; line-height: 1.7; }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px; margin-top: 30px;
+}
+.card {
+  padding: 26px; border-radius: 15px;
+  background: #131a2e;
+  border: 1px solid #303b56;
+  text-align: center; transition: .25s;
+}
+.card:hover {
+  transform: translateY(-6px);
+  border-color: #a78bfa;
+  box-shadow: 0 0 22px #7c3aed44;
+}
+.emoji { font-size: 42px; }
+.card h3 { color: #ddd6fe; }
+.card p { color: #b6c0d2; line-height: 1.6; }
+.card a { color: #c4b5fd; font-weight: bold; text-decoration: none; }
+.card a:hover { color: white; }
+footer {
+  padding: 28px; margin-top: 30px;
+  text-align: center; color: #9ca3af;
+  background: #10162a; border-top: 1px solid #35265b;
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">🏠 Home</a>
+  <a href="pokedex.html">📖 Pokédex</a>
+  <a href="biomes.html">🌍 Biomes</a>
+  <a href="guides.html">⚔️ Guides</a>
+  <a href="incineroar-family.html">🔥 Litten Family</a>
+</nav>
+
+<section class="hero">
+  <h1>⚡ PokéRogue Wiki ⚡</h1>
+  <p>Your ultimate fan-made hub for Pokémon, biomes, battle strategies and useful tips. Everything you need for your next adventure!</p>
+  <div class="buttons">
+    <a class="btn" href="pokedex.html">Explore Pokédex →</a>
+    <a class="btn" href="guides.html">View Guides →</a>
+  </div>
+</section>
+
+<main>
+  <h2>🌟 Explore the Wiki</h2>
+  <p class="intro">Choose your next destination. More discoveries await!</p>
+
+  <section class="cards">
+    <article class="card">
+      <div class="emoji">📖</div>
+      <h3>Ultimate Pokédex</h3>
+      <p>Search Pokémon, explore forms, check types and discover base stats.</p>
+      <a href="pokedex.html">Open Pokédex →</a>
+    </article>
+
+    <article class="card">
+      <div class="emoji">🌍</div>
+      <h3>Biome Explorer</h3>
+      <p>Explore different habitats and learn about the world of PokéRogue.</p>
+      <a href="biomes.html">Explore Biomes →</a>
+    </article>
+
+    <article class="card">
+      <div class="emoji">⚔️</div>
+      <h3>Battle Guides</h3>
+      <p>Find beginner tips, team-building ideas and battle strategies.</p>
+      <a href="guides.html">Read Guides →</a>
+    </article>
+
+    <article class="card">
+      <div class="emoji">✨</div>
+      <h3>Build Your Knowledge</h3>
+      <p>Learn about types, moves, abilities and items to plan your runs.</p>
+      <a href="pokedex.html">Discover Pokémon →</a>
+    </article>
+  </section>
+</main>
+
+<footer>
+  <p>💜 PokéRogue Fan Wiki</p>
+  <p>An unofficial fan-made project. Not affiliated with the PokéRogue developers or The Pokémon Company.</p>
+</footer>
+
+</body>
+</html>

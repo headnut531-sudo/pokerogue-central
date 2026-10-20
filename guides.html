@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PokéRogue Guides</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 25px;
+  background: #0b1020; color: white;
+  font-family: Arial, sans-serif;
+}
+nav { margin-bottom: 25px; }
+a { color: #c4b5fd; text-decoration: none; }
+a:hover { color: white; }
+h1 { text-align: center; color: #c4b5fd; }
+.subtitle { text-align: center; color: #9ca3af; }
+input, select {
+  width: 100%; padding: 12px; margin: 7px 0;
+  background: #151c30; color: white;
+  border: 1px solid #514078; border-radius: 9px;
+}
+#guides {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px; max-width: 1100px; margin: 25px auto;
+}
+.card {
+  background: #151c30; border: 1px solid #303b56;
+  border-radius: 14px; padding: 20px; transition: .2s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #a78bfa;
+  box-shadow: 0 0 18px #7c3aed66;
+}
+.card h2 { color: #c4b5fd; }
+.card p { color: #d1d5db; line-height: 1.5; }
+.card button {
+  padding: 10px 14px; border: 0; border-radius: 8px;
+  color: white; background: #6d28d9; cursor: pointer;
+}
+.card button:hover { background: #7c3aed; }
+#article {
+  display: none; max-width: 800px; margin: 25px auto;
+  padding: 22px; background: #151c30;
+  border: 1px solid #7c3aed; border-radius: 14px;
+  line-height: 1.7;
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html">Home</a> |
+  <a href="pokedex.html">Pokédex</a> |
+  <a href="biomes.html">Biomes</a> |
+  <a href="guides.html">Guides</a>
+  <a href="incineroar-family.html">🔥 Litten Family</a>
+</nav>
+
+<h1>⚔️ PokéRogue Guides</h1>
+<p class="subtitle">Learn the game. Build your team. Win your runs.</p>
+
+<input id="search" placeholder="🔎 Search guides...">
+<select id="category">
+  <option value="all">All guide categories</option>
+  <option value="battle">Battle strategies</option>
+  <option value="team">Team building</option>
+  <option value="items">Items and resources</option>
+  <option value="basics">Beginner tips</option>
+</select>
+
+<main id="guides"></main>
+<section id="article"></section>
+
+<script>
+const guides = [
+  {
+    title: "Building a Strong Team",
+    category: "team",
+    description: "Build a balanced team for different battles.",
+    content: `
+      <h3>Team-building tips</h3>
+      <ul>
+        <li>Cover weaknesses with different Pokémon types.</li>
+        <li>Bring Pokémon with useful support moves.</li>
+        <li>Think about your team's abilities as well as its moves.</li>
+        <li>Keep your team healthy between important battles.</li>
+      </ul>`
+  },
+  {
+    title: "Boss Battle Preparation",
+    category: "battle",
+    description: "Prepare for tough opponents and major battles.",
+    content: `
+      <h3>Before a boss battle</h3>
+      <ul>
+        <li>Check your Pokémon's moves and weaknesses.</li>
+        <li>Keep useful healing items when possible.</li>
+        <li>Consider status moves and stat changes.</li>
+        <li>Don't rely on one attack against every opponent.</li>
+      </ul>`
+  },
+  {
+    title: "Understanding Held Items",
+    category: "items",
+    description: "Learn why held items can make a difference.",
+    content: `
+      <h3>Held item tips</h3>
+      <ul>
+        <li>Look for items that complement a Pokémon's role.</li>
+        <li>Offensive items can help sweepers deal more damage.</li>
+        <li>Defensive and recovery items can improve survival.</li>
+        <li>Check item descriptions to understand their effects.</li>
+      </ul>`
+  },
+  {
+    title: "Beginner's Guide",
+    category: "basics",
+    description: "Get started with the basics of a PokéRogue run.",
+    content: `
+      <h3>Getting started</h3>
+      <ul>
+        <li>Choose starters that work well together.</li>
+        <li>Learn what each Pokémon's moves do.</li>
+        <li>Use rewards to cover your team's weaknesses.</li>
+        <li>Adapt your strategy as the run gets harder.</li>
+      </ul>`
+  },
+  {
+    title: "Making the Most of Type Matchups",
+    category: "battle",
+    description: "Use type advantages to plan your attacks.",
+    content: `
+      <h3>Type matchup tips</h3>
+      <ul>
+        <li>Super-effective moves deal extra damage.</li>
+        <li>Some types are immune to particular attacks.</li>
+        <li>Dual types can change a Pokémon's weaknesses.</li>
+        <li>Check the opponent before choosing your move.</li>
+      </ul>`
+  },
+  {
+    title: "Managing Your Resources",
+    category: "items",
+    description: "Make thoughtful choices between battles.",
+    content: `
+      <h3>Resource tips</h3>
+      <ul>
+        <li>Compare reward choices with your team's needs.</li>
+        <li>Don't ignore a Pokémon that needs healing.</li>
+        <li>Choose upgrades that help your current strategy.</li>
+        <li>Save important resources for difficult encounters.</li>
+      </ul>`
+  }
+];
+
+const container = document.getElementById("guides");
+const article = document.getElementById("article");
+
+function render() {
+  const q = document.getElementById("search").value.toLowerCase();
+  const cat = document.getElementById("category").value;
+
+  const filtered = guides.filter(g =>
+    (g.title + " " + g.description).toLowerCase().includes(q) &&
+    (cat === "all" || g.category === cat)
+  );
+
+  container.innerHTML = filtered.map(g => `
+    <article class="card">
+      <p>📘 ${g.category.toUpperCase()}</p>
+      <h2>${g.title}</h2>
+      <p>${g.description}</p>
+      <button data-title="${g.title}">Read guide →</button>
+    </article>
+  `).join("") || "<p>No matching guides found.</p>";
+
+  container.querySelectorAll("button").forEach(button => {
+    button.addEventListener("click", () => {
+      const guide = guides.find(g => g.title === button.dataset.title);
+      article.innerHTML = `
+        <button id="close">✕ Close guide</button>
+        <h2>${guide.title}</h2>
+        ${guide.content}
+        <p><em>General tips — details can vary by game version and run.</em></p>
+      `;
+      article.style.display = "block";
+      document.getElementById("close").onclick = () => {
+        article.style.display = "none";
+      };
+      article.scrollIntoView({ behavior: "smooth" });
+    });
+  });
+}
+
+document.getElementById("search").addEventListener("input", render);
+document.getElementById("category").addEventListener("change", render);
+render();
+</script>
+</body>
+</html>

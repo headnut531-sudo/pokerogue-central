@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Special Forms | PokéRogue Central</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090b18;color:#f5f3ff;font-family:Arial,sans-serif}
+header{text-align:center;padding:38px 15px;background:radial-gradient(ellipse at top,#42166c,#090b18 75%)}
+h1{font-size:clamp(2rem,6vw,4rem);margin:10px;background:linear-gradient(90deg,#c084fc,#f9a8d4,#93c5fd);color:transparent;background-clip:text}
+nav{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;padding:14px;background:#101020;position:sticky;top:0;z-index:5}
+nav a{padding:10px 14px;background:#211a38;color:white;text-decoration:none;border-radius:10px}
+nav a:hover{background:#9333ea}
+main{max-width:1250px;margin:auto;padding:22px}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:20px 0}
+input,select,button{padding:13px;border-radius:12px;border:1px solid #a855f755;background:#17162b;color:white;font-size:1rem;width:100%}
+button{cursor:pointer}
+#status{text-align:center;color:#c4b5fd;padding:15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:15px}
+.card{background:linear-gradient(145deg,#211a38,#111323);border:1px solid #a855f744;border-radius:17px;padding:14px 8px;text-align:center;transition:.2s;overflow:hidden}
+.card:hover{transform:translateY(-5px);border-color:#f472b6;box-shadow:0 8px 25px #a855f722}
+.card img{width:120px;height:120px;object-fit:contain;image-rendering:auto}
+.name{font-weight:bold;text-transform:capitalize;margin:8px 0}
+.category{font-size:.75rem;color:#e9d5ff;background:#6b21a8;padding:6px 9px;border-radius:20px;display:inline-block;margin-top:5px}
+#more{display:block;max-width:300px;margin:25px auto}
+footer{text-align:center;color:#aaa8c4;padding:30px}
+</style>
+</head>
+<body>
+<header>
+<div>✨ 🌌 ⚡ 🌌 ✨</div>
+<h1>SPECIAL FORMS</h1>
+<p>Mega Evolutions, Gigantamax, regional forms and more!</p>
+</header>
+<nav>
+<a href="index.html">🏠 Home</a>
+<a href="pokedex.html">📖 Pokédex</a>
+<a href="special-forms.html">✨ Special Forms</a>
+<a href="biomes.html">🌍 Biomes</a>
+<a href="guides.html">⚔️ Guides</a>
+<a href="incineroar-family.html">🔥 Litten Family</a>
+</nav>
+<main>
+<h2>🔮 Explore alternate forms</h2>
+<p>Discover different appearances, regional variants and special Pokémon forms.</p>
+<div class="controls">
+<input id="search" placeholder="Search forms or Pokémon...">
+<select id="category">
+<option value="all">All special forms</option>
+<option value="mega">Mega Evolutions</option>
+<option value="gmax">Gigantamax</option>
+<option value="regional">Regional forms</option>
+<option value="primal">Primal forms</option>
+<option value="other">Other forms</option>
+</select>
+</div>
+<div id="status">Finding special forms... 💜</div>
+<section id="grid" class="grid"></section>
+<button id="more" style="display:none">⬇️ Load More</button>
+</main>
+<footer>💜 PokéRogue Central • Gotta discover them all!</footer>
+<script>
+const API="https://pokeapi.co/api/v2";
+const grid=document.getElementById("grid");
+const statusText=document.getElementById("status");
+const search=document.getElementById("search");
+const category=document.getElementById("category");
+const more=document.getElementById("more");
+
+let forms=[];
+let shown=0;
+const PAGE_SIZE=60;
+
+function getCategory(name){
+ if(/mega/.test(name)) return "mega";
+ if(/gmax|gigantamax/.test(name)) return "gmax";
+ if(/primal/.test(name)) return "primal";
+ if(/alola|alolan|galar|galarian|hisui|hisuian|paldea|paldean/.test(name)) return "regional";
+ return "other";
+}
+
+function isSpecial(name){
+ return /mega|gmax|primal|alola|alolan|galar|galarian|hisui|hisuian|paldea|paldean|origin|altered|sky|therian|incarnate|crowned|school|solo|ash-|battle-bond|eternal|complete|dusk-mane|dawn-wings|ultra|unbound|blade|shield|attack|defense|speed|wash|heat|mow|frost|fan-|zen|white-kyurem|black-kyurem|white-black|resolute|pirouette|aria|sunshine|overcast|midday|midnight|dusk|own-tempo|female|male|10-percent|50-percent|complete|starter/.test(name);
+}
+
+function niceName(name){
+ return name.replaceAll("-"," ").replace(/\b\w/g,c=>c.toUpperCase());
+}
+
+function renderBatch(){
+ const query=search.value.trim().toLowerCase();
+ const selected=category.value;
+ const filtered=forms.filter(p=>
+  p.name.includes(query) &&
+  (selected==="all" || getCategory(p.name)===selected)
+ );
+ const batch=filtered.slice(shown,shown+PAGE_SIZE);
+
+ batch.forEach(p=>{
+  const card=document.createElement("article");
+  card.className="card";
+  const img=document.createElement("img");
+  img.loading="lazy";
+  img.alt=niceName(p.name);
+  img.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png`;
+  img.onerror=()=>{
+   img.onerror=null;
+   img.src=`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.id}.png`;
+  };
+
+  const name=document.createElement("div");
+  name.className="name";
+  name.textContent=niceName(p.name);
+
+  const label=document.createElement("span");
+  label.className="category";
+  const kind=getCategory(p.name);
+  label.textContent=({
+   mega:"Mega Evolution",
+   gmax:"Gigantamax",
+   regional:"Regional Form",
+   primal:"Primal Form",
+   other:"Other Form"
+  })[kind];
+
+  card.append(img,name,label);
+  grid.appendChild(card);
+ });
+
+ shown+=batch.length;
+ statusText.textContent=filtered.length
+  ? `${filtered.length} forms found • ${Math.min(shown,filtered.length)} displayed`
+  : "No matching forms found. Try another search!";
+ more.style.display=shown<filtered.length?"block":"none";
+}
+
+function refresh(){
+ shown=0;
+ grid.innerHTML="";
+ renderBatch();
+}
+
+async function init(){
+ try{
+  const response=await fetch(`${API}/pokemon?limit=2000&offset=0`);
+  if(!response.ok) throw new Error("API unavailable");
+  const data=await response.json();
+  forms=data.results.map(p=>({
+   name:p.name,
+   id:Number(p.url.split("/").filter(Boolean).pop())
+  })).filter(p=>isSpecial(p.name));
+  forms.sort((a,b)=>a.name.localeCompare(b.name));
+  refresh();
+ }catch(e){
+  statusText.textContent="Couldn't load forms. Check your internet connection and refresh!";
+ }
+}
+
+search.addEventListener("input",refresh);
+category.addEventListener("change",refresh);
+more.addEventListener("click",renderBatch);
+init();
+</script>
+</body>
+</html>
